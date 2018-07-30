@@ -1,46 +1,62 @@
 name: "ResNet-50"
 layer {
-    name: "data"
-    type: "Data"
-    top: "data"
-    top: "label"
-    include {
-        phase: TRAIN
-    }
-    transform_param {
-        mirror: true
-        crop_size: 224
-        mean_value: 104
-        mean_value: 117
-        mean_value: 123
-    }
-    data_param {
-        source: "../ilsvrc2012/ilsvrc2012_train"
-        batch_size: 32
-        backend: LMDB
-    }
+  name: "data"
+  type: "ImageData"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    mirror: true
+    crop_size: 224
+    mean_value: 103.94
+    mean_value: 116.78
+    mean_value: 123.68
+    scale: 0.017
+  }
+  image_data_param {
+    source: "/xuan/detection/data/jk-cut-train/train.txt"
+    root_folder: "/xuan/detection/data/jk-cut-train/"
+    new_height: 250
+    new_width: 250
+    batch_size: 10
+    rand_skip: 100
+    shuffle: true
+  }
 }
+
+
 layer {
-    name: "data"
-    type: "Data"
-    top: "data"
-    top: "label"
-    include {
-        phase: TEST
-    }
-    transform_param {
-        mirror: false
-        crop_size: 224
-        mean_value: 104
-        mean_value: 117
-        mean_value: 123
-    }
-    data_param {
-        source: "../ilsvrc2012/ilsvrc2012_val"
-        batch_size: 1
-        backend: LMDB
-    }
+  name: "data"
+  type: "ImageData"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    mirror: true
+    crop_size: 224
+    mean_value: 103.94
+    mean_value: 116.78
+    mean_value: 123.68
+    scale: 0.017
+  }
+  image_data_param {
+    source: "/xuan/detection/data/test.txt"
+    root_folder: "/xuan/detection/data/jk-cut-train"
+    new_height: 250
+    new_width: 250
+    batch_size: 10
+    rand_skip: 100
+    shuffle: true
+  }
 }
+
+
+
+
 
 layer {
     bottom: "data"
